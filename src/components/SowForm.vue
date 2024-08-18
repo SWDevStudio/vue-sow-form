@@ -2,13 +2,6 @@
   <form>
     <slot />
   </form>
-
-  <div>
-    Form
-    <pre>
-      {{ fields }}
-    </pre>
-  </div>
 </template>
 
 <script setup lang="ts">

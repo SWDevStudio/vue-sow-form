@@ -4,10 +4,6 @@
       <TField v-model="form.name" :rules="rules.name" />
     </SowForm>
   </div>
-
-  <pre>
-    {{ form }}
-  </pre>
 </template>
 
 <script lang="ts" setup>
