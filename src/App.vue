@@ -1,7 +1,8 @@
 <template>
   <div>
     <SowForm>
-      <TField v-model="form.name" :rules="rules.name" />
+      <SowError name="name"></SowError>
+      <TField v-model="form.name" :rules="rules.name" name="name" />
     </SowForm>
   </div>
 </template>
@@ -12,6 +13,7 @@ import TField from "@/test-components/TField.vue";
 import { ref } from "vue";
 import defineRule from "@/utils/defineRule";
 import { minLength, require } from "@/rules";
+import SowError from "@/components/SowError.vue";
 
 const form = ref({
   name: "",

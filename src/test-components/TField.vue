@@ -13,6 +13,7 @@ import { IFormRule } from "@/interface/IFormRule";
 const props = defineProps<{
   modelValue: string;
   rules: IFormRule[];
+  name: string;
 }>();
 
 const emit = defineEmits(["update:modelValue"]);
@@ -29,6 +30,7 @@ const innerValue = computed({
 const { invalidMessage } = useField({
   modelValue: innerValue,
   rules: props.rules || [],
+  name: props.name,
 });
 </script>
 

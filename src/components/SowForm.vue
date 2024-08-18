@@ -1,15 +1,23 @@
 <template>
   <form>
-    <slot />
+    <slot :errors="errors" />
+    {{ errors }}
   </form>
 </template>
 
 <script setup lang="ts">
 import { ISowForm } from "@/interface/ISowForm";
-import { provide, Ref, ref } from "vue";
+import { provide, Ref, ref, computed } from "vue";
 import { IField } from "@/interface/IField";
 
 const fields: Ref<IField[]> = ref([]);
+
+const errors = computed(() => {
+  // Через reduce не хотело работать, не знаю в чем причина
+  return Object.fromEntries(
+    fields.value.filter((i) => i.name).map((i) => [i.name, i.invalidMessage])
+  );
+});
 
 function registerField(field: IField) {
   fields.value.push(field);
@@ -23,6 +31,7 @@ function unregisterField(fieldKey: number) {
 const provideObject: ISowForm = {
   registerField,
   unregisterField,
+  errors,
 };
 
 provide("sow-form", provideObject);

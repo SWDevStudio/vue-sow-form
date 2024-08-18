@@ -1,6 +1,7 @@
 import useForm from "@/compose/useForm";
 import { computed, onMounted, onUnmounted, ref, Ref } from "vue";
 import { IFormRule } from "@/interface/IFormRule";
+import { IField } from "@/interface/IField";
 
 interface FieldOptions {
   name?: string;
@@ -20,10 +21,12 @@ export default function useField(options: FieldOptions) {
 
   const isValid = computed(() => !invalidMessage.value);
 
-  const fieldData = {
+  const fieldData: IField = {
     modelValue: options.modelValue,
     isValid: isValid,
     key: fieldKey,
+    invalidMessage: invalidMessage,
+    name: options.name,
   };
 
   onMounted(() => {
