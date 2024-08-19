@@ -1,8 +1,8 @@
 <template>
   <div>
-    <SowForm>
-      <SowError name="name"></SowError>
+    <SowForm ref="formRef">
       <TField v-model="form.name" :rules="rules.name" name="name" />
+      <TField v-model="form.address" :rules="rules.name" name="address" />
     </SowForm>
   </div>
 </template>
@@ -10,13 +10,17 @@
 <script lang="ts" setup>
 import SowForm from "@/components/SowForm.vue";
 import TField from "@/test-components/TField.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import defineRule from "@/utils/defineRule";
 import { minLength, require } from "@/rules";
-import SowError from "@/components/SowError.vue";
+import { ComponentExposed } from "vue-component-type-helpers";
+import defineError from "@/utils/defineError";
+
+const formRef = ref<ComponentExposed<typeof SowForm>>(null);
 
 const form = ref({
   name: "",
+  address: "",
 });
 
 const rules = {
@@ -25,6 +29,13 @@ const rules = {
     defineRule(minLength(3), "Поле должно быть мин"),
   ],
 };
+
+onMounted(() => {
+  formRef.value?.addError([
+    defineError("name", "Тупая ошибка с сервера"),
+    defineError("address", "Плохая ошибка"),
+  ]);
+});
 </script>
 
 <style></style>
