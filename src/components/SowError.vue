@@ -4,9 +4,9 @@
 
 <script setup lang="ts">
 import { withDefaults, defineProps } from "vue";
-import injectForm from "@/compose/injectForm";
+import useForm from "@/compose/useForm";
 
-const { errors } = injectForm();
+const { errors } = useForm();
 
 withDefaults(
   defineProps<{

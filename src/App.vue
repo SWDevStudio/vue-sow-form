@@ -1,19 +1,9 @@
 <template>
   <div>
-    <!--    <SowForm ref="formRef" id="form-one">-->
-    <!--      <div>Форма один</div>-->
-    <!--      <TField v-model="form.name" :rules="rules.name" name="name" />-->
-    <!--      <TField v-model="form.address" :rules="rules.name" name="address" />-->
-    <!--    </SowForm>-->
-
-    <div>DIVIDER</div>
-
-    <SowForm id="form-two" ref="formRef">
-      <TField v-model="formTwo.user" name="name" />
-      <TField v-model="formTwo.count" :rules="rules.name" />
+    <SowForm ref="formRef">
+      <TField v-model="form.name" :rules="rules.name" name="name" />
+      <TField v-model="form.address" :rules="rules.name" name="address" />
     </SowForm>
-
-    <TField v-model="formTwo.data" form-id="form-two" name="kek" />
   </div>
 </template>
 
@@ -24,14 +14,13 @@ import { onMounted, ref } from "vue";
 import defineRule from "@/utils/defineRule";
 import { minLength, require } from "@/rules";
 import { ComponentExposed } from "vue-component-type-helpers";
-import { defineError } from "@/index";
+import defineError from "@/utils/defineError";
 
 const formRef = ref<ComponentExposed<typeof SowForm>>(null);
 
-const formTwo = ref({
-  user: "",
-  count: "",
-  data: "",
+const form = ref({
+  name: "",
+  address: "",
 });
 
 const rules = {
@@ -42,9 +31,10 @@ const rules = {
 };
 
 onMounted(() => {
-  setTimeout(() => {
-    formRef.value?.addError([defineError("name", "Тупая ошибка с сервера")]);
-  }, 2000);
+  formRef.value?.addError([
+    defineError("name", "Тупая ошибка с сервера"),
+    defineError("address", "Плохая ошибка"),
+  ]);
 });
 </script>
 

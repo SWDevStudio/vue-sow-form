@@ -1,3 +1,8 @@
-import useForm from "@/compose/useForm";
+import { IField } from "@/interface/IField";
+import { Ref } from "vue";
 
-export type ISowForm = ReturnType<typeof useForm>;
+export interface ISowForm {
+  registerField: (field: IField) => number;
+  unregisterField: (fieldKey: number) => void;
+  errors: Ref<object>;
+}
