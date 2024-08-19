@@ -1,17 +1,23 @@
-import useForm from "@/compose/useForm";
+import injectForm from "@/compose/injectForm";
 import { computed, onMounted, onUnmounted, ref, Ref, watch } from "vue";
 import { IFormRule } from "@/interface/IFormRule";
 import { IField } from "@/interface/IField";
 import { IError } from "@/interface/IError";
+import { ISowForm } from "@/interface/ISowForm";
 
 interface FieldOptions {
   readonly name?: string;
   readonly modelValue: Ref<string>;
   readonly rules: IFormRule[];
+  readonly formId?: string;
 }
 
 export default function useField(options: FieldOptions) {
-  const { registerField, unregisterField } = useForm();
+  const form: Ref<null | ISowForm> = ref(null);
+
+  injectForm(options.formId).then((response) => {
+    form.value = response;
+  });
 
   const fieldKey: Ref<null | number> = ref(null);
 
@@ -46,12 +52,12 @@ export default function useField(options: FieldOptions) {
     addServerError,
   };
 
-  onMounted(() => {
-    fieldKey.value = registerField(fieldData);
+  watch(form, () => {
+    if (form.value) fieldKey.value = form.value.registerField(fieldData);
   });
 
   onUnmounted(() => {
-    if (fieldKey.value) unregisterField(fieldKey.value);
+    if (fieldKey.value) form.value?.unregisterField(fieldKey.value);
   });
 
   return {
