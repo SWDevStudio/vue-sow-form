@@ -11,7 +11,7 @@ interface FieldOptions {
 }
 
 export default function useField(options: FieldOptions) {
-  const { registerField, unregisterField } = useForm();
+  const { registerField, unregisterField, checkValid } = useForm();
 
   const fieldKey: Ref<null | number> = ref(null);
 
@@ -26,6 +26,7 @@ export default function useField(options: FieldOptions) {
 
   watch(options.modelValue, () => {
     removeServerError();
+    checkValid();
   });
 
   const invalidMessage = computed(

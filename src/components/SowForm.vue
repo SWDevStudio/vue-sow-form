@@ -1,34 +1,32 @@
 <template>
   <form>
-    <slot :errors="errors" />
-    {{ errors }}
+    <slot :isValid="isValid" />
   </form>
 </template>
 
 <script setup lang="ts">
 import { ISowForm } from "@/interface/ISowForm";
-import { provide, Ref, ref, computed } from "vue";
+import { provide, Ref, ref } from "vue";
 import { IField } from "@/interface/IField";
-import { defineExpose } from "vue";
+import { defineExpose, defineEmits } from "vue";
 import { IError } from "@/interface/IError";
 
 const fields: Ref<IField[]> = ref([]);
 
-const errors = computed(() => {
-  // Через reduce не хотело работать, не знаю в чем причина
-  return Object.fromEntries(
-    fields.value.filter((i) => i.name).map((i) => [i.name, i.invalidMessage])
-  );
-});
+// field
 
 function registerField(field: IField) {
   fields.value.push(field);
+  checkValid();
   return fields.value.length;
 }
 
 function unregisterField(fieldKey: number) {
   fields.value = fields.value.filter((f) => f.key.value !== fieldKey);
+  checkValid();
 }
+
+// error
 
 function addError(payload: IError | IError[]) {
   const fn = (err: IError) => {
@@ -40,7 +38,14 @@ function addError(payload: IError | IError[]) {
   else fn(payload);
 }
 
-// function removeError(id: string) {}
+// valid
+
+const isValid = ref(false);
+const emit = defineEmits(["update:isValid"]);
+function checkValid() {
+  isValid.value = fields.value.every((item) => item.isValid);
+  emit("update:isValid", isValid.value);
+}
 
 defineExpose({
   addError,
@@ -49,7 +54,9 @@ defineExpose({
 const provideObject: ISowForm = {
   registerField,
   unregisterField,
-  errors,
+  checkValid,
+  fields,
+  isValid,
 };
 
 provide("sow-form", provideObject);

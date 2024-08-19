@@ -1,21 +1,26 @@
 <template>
   <div class="t-field">
-    <input v-model="innerValue" />
-    <div v-if="invalidMessage">{{ invalidMessage }}</div>
+    <input v-model="innerValue" :placeholder="name" />
+    <!--    <div v-if="invalidMessage">{{ invalidMessage }}</div>-->
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, defineEmits } from "vue";
+import { computed, defineProps, defineEmits, withDefaults } from "vue";
 import useField from "@/compose/useField";
 import { IFormRule } from "@/interface/IFormRule";
 
-const props = defineProps<{
-  modelValue: string;
-  rules: IFormRule[];
-  name: string;
-}>();
-
+const props = withDefaults(
+  defineProps<{
+    modelValue: string;
+    rules?: IFormRule[];
+    name?: string;
+    formId?: string;
+  }>(),
+  {
+    rules: () => [],
+  }
+);
 const emit = defineEmits(["update:modelValue"]);
 
 const innerValue = computed({

@@ -4,5 +4,7 @@ import { Ref } from "vue";
 export interface ISowForm {
   registerField: (field: IField) => number;
   unregisterField: (fieldKey: number) => void;
-  errors: Ref<object>;
+  checkValid: () => void;
+  fields: Ref<IField[]>;
+  isValid: Ref<boolean>;
 }
