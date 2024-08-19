@@ -1,14 +1,14 @@
 <template>
-  <component :is="tag" v-if="errors?.[name]"> {{ errors?.[name] }} </component>
+  <component :is="tag" v-if="invalidMessage"> {{ invalidMessage }} </component>
 </template>
 
 <script setup lang="ts">
-import { withDefaults, defineProps } from "vue";
+import { withDefaults, defineProps, computed } from "vue";
 import useForm from "@/compose/useForm";
 
-const { errors } = useForm();
+const { fields } = useForm();
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     tag: "div" | "span";
     name: string;
@@ -17,6 +17,10 @@ withDefaults(
     tag: "span",
   }
 );
+
+const invalidMessage = computed(() => {
+  return fields.value.find((i) => i.name === props.name)?.invalidMessage;
+});
 </script>
 
 <style scoped></style>
